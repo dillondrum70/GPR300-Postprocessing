@@ -17,6 +17,7 @@
 #include "Postprocessing/InvertEffect.h"
 #include "Postprocessing/EdgeDetectEffect.h"
 #include "Postprocessing/ChromaticEffect.h"
+#include "Postprocessing/BlurEffect.h"
 
 class FramebufferObject
 {

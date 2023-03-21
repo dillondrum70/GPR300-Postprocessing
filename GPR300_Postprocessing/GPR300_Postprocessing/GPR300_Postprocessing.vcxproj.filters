@@ -93,6 +93,9 @@
     <ClCompile Include="Source\Postprocessing\ChromaticEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Postprocessing\BlurEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EW\Shader.h">
@@ -191,6 +194,9 @@
     <ClInclude Include="Source\Postprocessing\ChromaticEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Postprocessing\BlurEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\blit.frag" />
@@ -199,5 +205,6 @@
     <None Include="shaders\invert.frag" />
     <None Include="shaders\edgeDetect.frag" />
     <None Include="shaders\chromatic.frag" />
+    <None Include="shaders\blur.frag" />
   </ItemGroup>
 </Project>

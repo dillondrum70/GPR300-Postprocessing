@@ -148,6 +148,7 @@
     <ClCompile Include="Source\FramebufferObject.cpp" />
     <ClCompile Include="Source\PointLight.cpp" />
     <ClCompile Include="Source\Material.cpp" />
+    <ClCompile Include="Source\Postprocessing\BlurEffect.cpp" />
     <ClCompile Include="Source\Postprocessing\ChromaticEffect.cpp" />
     <ClCompile Include="Source\Postprocessing\EdgeDetectEffect.cpp" />
     <ClCompile Include="Source\Postprocessing\GrayscaleEffect.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\PostprocessEffect.h" />
     <ClInclude Include="Source\PostprocessEffects.h" />
+    <ClInclude Include="Source\Postprocessing\BlurEffect.h" />
     <ClInclude Include="Source\Postprocessing\ChromaticEffect.h" />
     <ClInclude Include="Source\Postprocessing\EdgeDetectEffect.h" />
     <ClInclude Include="Source\Postprocessing\GrayscaleEffect.h" />
@@ -194,6 +196,7 @@
   <ItemGroup>
     <None Include="shaders\blit.frag" />
     <None Include="shaders\blit.vert" />
+    <None Include="shaders\blur.frag" />
     <None Include="shaders\chromatic.frag" />
     <None Include="shaders\edgeDetect.frag" />
     <None Include="shaders\grayscale.frag" />

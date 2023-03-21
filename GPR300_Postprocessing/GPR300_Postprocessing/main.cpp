@@ -256,6 +256,10 @@ int main() {
 	Shader* chromaticShader = new Shader("shaders/blit.vert", "shaders/chromatic.frag");
 	ChromaticEffect chromaticEffect = ChromaticEffect(chromaticShader, "Chromatic Aberration");
 	fbo.AddEffect(&chromaticEffect);
+
+	Shader* blurShader = new Shader("shaders/blit.vert", "shaders/blur.frag");
+	BlurEffect blurEffect = BlurEffect(blurShader, "Gaussian Blur");
+	fbo.AddEffect(&blurEffect);
 	
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
