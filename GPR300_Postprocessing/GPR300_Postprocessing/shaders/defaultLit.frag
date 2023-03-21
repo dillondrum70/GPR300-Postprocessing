@@ -1,5 +1,6 @@
 #version 450                          
-out vec4 FragColor;
+layout (location = 0) out vec4 FragColor;
+layout (location = 1) out vec4 BrightColor;
 
 in struct Vertex
 {
@@ -237,4 +238,5 @@ void main()
     FragColor = texture(_Textures[_CurrentTexture].texSampler, uv) * vec4(ambient + diffuse + specular, 1.0f);
     //FragColor = vec4(vert_out.UV.x, vert_out.UV.y, 0, 1);
     //FragColor = vec4(normal, 1);
+    BrightColor = FragColor;
 }

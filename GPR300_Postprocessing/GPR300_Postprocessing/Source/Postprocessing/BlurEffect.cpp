@@ -11,9 +11,9 @@ void BlurEffect::ExposeImGui()
 }
 
 
-void BlurEffect::SetupShader(unsigned int colorBuffer)
+void BlurEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 {
-	PostprocessEffect::SetupShader(colorBuffer);
+	PostprocessEffect::SetupShader(colorBuffers);
 
 	_shader->setFloat("_BlurStrength", _blurStrength);
 	_shader->setInt("horizontal", _horizontal);

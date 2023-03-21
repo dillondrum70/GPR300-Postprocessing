@@ -12,8 +12,8 @@ void PostprocessEffect::ExposeImGui()
 	ImGui::Text(_name.c_str());
 }
 
-void PostprocessEffect::SetupShader(unsigned int colorBuffer)
+void PostprocessEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 {
 	_shader->use();
-	_shader->setInt("_ColorTex", colorBuffer);
+	_shader->setInt("_ColorTex", colorBuffers[0]);
 }

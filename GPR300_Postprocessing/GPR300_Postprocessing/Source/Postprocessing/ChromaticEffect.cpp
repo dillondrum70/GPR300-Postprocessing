@@ -12,9 +12,9 @@ void ChromaticEffect::ExposeImGui()
 }
 
 
-void ChromaticEffect::SetupShader(unsigned int colorBuffer)
+void ChromaticEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 {
-	PostprocessEffect::SetupShader(colorBuffer);
+	PostprocessEffect::SetupShader(colorBuffers);
 
 	_shader->setFloat("_AberrationAmount", _aberrationAmount);
 	_shader->setFloat("_Time", (float)glfwGetTime());

@@ -121,5 +121,5 @@ void FramebufferObject::SetupShader()
 		return;
 	}
 
-	postprocessEffects[currentEffect]->SetupShader(colorAttachments[0]);
+	postprocessEffects[currentEffect]->SetupShader(colorAttachments);
 }

@@ -11,7 +11,7 @@ public:
 
 	void ExposeImGui() override;
 
-	void SetupShader(unsigned int colorBuffer) override;
+	void SetupShader(const std::vector<unsigned int>& colorBuffers) override;
 
 protected:
 

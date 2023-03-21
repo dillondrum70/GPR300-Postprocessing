@@ -5,6 +5,8 @@
 
 #include "imgui.h"
 
+#include <vector>
+
 class PostprocessEffect
 {
 public:
@@ -13,7 +15,7 @@ public:
 
 	virtual void ExposeImGui();
 
-	virtual void SetupShader(unsigned int colorBuffer);
+	virtual void SetupShader(const std::vector<unsigned int>& colorBuffers);
 	
 	Shader* GetShader() { return _shader; }
 	std::string GetName() { return _name; }

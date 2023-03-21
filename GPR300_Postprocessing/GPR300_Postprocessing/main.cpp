@@ -228,6 +228,9 @@ int main() {
 	//If this is created after all texutres are loaded (and all the textures haven't been used) then it shouldn't overwrite or be overwritten by any textures
 	ColorBuffer colorBuffer;
 	colorBuffer.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	ColorBuffer secondColorBuffer;
+	secondColorBuffer.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	DepthBuffer depthBuffer;
 	depthBuffer.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -235,6 +238,7 @@ int main() {
 	FramebufferObject fbo;
 	fbo.Create();
 	fbo.AddColorAttachment(colorBuffer, GL_COLOR_ATTACHMENT0);
+	fbo.AddColorAttachment(secondColorBuffer, GL_COLOR_ATTACHMENT1);
 	fbo.AddDepthAttachment(depthBuffer);
 
 	Shader* blitShader = new Shader("shaders/blit.vert", "shaders/blit.frag");
@@ -281,6 +285,8 @@ int main() {
 		//Bind and clear frame buffer
 		fbo.Bind();
 		fbo.Clear(bgColor);
+		GLenum buffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+		glDrawBuffers(2, buffers);
 
 		//Draw
 		litShader.use();
@@ -435,6 +441,11 @@ int main() {
 		
 		glActiveTexture(GL_TEXTURE0 + colorBuffer.GetTexture());
 		glBindTexture(GL_TEXTURE_2D, colorBuffer.GetTexture());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+
+		glActiveTexture(GL_TEXTURE0 + secondColorBuffer.GetTexture());
+		glBindTexture(GL_TEXTURE_2D, secondColorBuffer.GetTexture());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 

@@ -9,9 +9,9 @@ void EdgeDetectEffect::ExposeImGui()
 }
 
 
-void EdgeDetectEffect::SetupShader(unsigned int colorBuffer)
+void EdgeDetectEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 {
-	PostprocessEffect::SetupShader(colorBuffer);
+	PostprocessEffect::SetupShader(colorBuffers);
 
 	_shader->setFloat("_SampleDist", _sampleDist);
 	_shader->setFloat("_Threshold", _threshold);
