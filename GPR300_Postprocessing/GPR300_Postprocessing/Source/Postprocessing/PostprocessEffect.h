@@ -22,12 +22,14 @@ public:
 	Shader* GetShader() { return _shader; }
 	std::string GetName() { return _name; }
 
-	FramebufferObject* parent;
+	virtual void SetParent(FramebufferObject* parent);
 
 protected:
 
 	Shader* _shader;
 	std::string _name;
+
+	FramebufferObject* _parent;
 
 private:
 };

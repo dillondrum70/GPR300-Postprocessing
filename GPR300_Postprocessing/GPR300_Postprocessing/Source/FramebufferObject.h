@@ -18,6 +18,7 @@
 #include "Postprocessing/EdgeDetectEffect.h"
 #include "Postprocessing/ChromaticEffect.h"
 #include "Postprocessing/BlurEffect.h"
+#include "Postprocessing/BloomEffect.h"
 
 class FramebufferObject
 {

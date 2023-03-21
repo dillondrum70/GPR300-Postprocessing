@@ -212,5 +212,6 @@
     <None Include="shaders\edgeDetect.frag" />
     <None Include="shaders\chromatic.frag" />
     <None Include="shaders\blur.frag" />
+    <None Include="shaders\bloom.frag" />
   </ItemGroup>
 </Project>

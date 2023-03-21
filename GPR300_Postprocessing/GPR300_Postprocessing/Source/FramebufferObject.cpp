@@ -110,7 +110,7 @@ void FramebufferObject::ExposeImGui()
 
 void FramebufferObject::AddEffect(PostprocessEffect* effect)
 {
-	effect->parent = this;
+	effect->SetParent(this);
 	postprocessEffects.push_back(effect);
 }
 

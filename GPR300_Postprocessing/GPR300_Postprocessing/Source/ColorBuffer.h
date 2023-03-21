@@ -12,6 +12,7 @@ class ColorBuffer
 public:
 
 	void Create(int screenWidth, int screenHeight);
+	void Copy(unsigned int tex, glm::vec2 dimensions) { texture = tex; screenDimensions = dimensions; }
 
 	unsigned int GetTexture() { return texture; }
 	glm::vec2 GetDimensions() { return screenDimensions; }

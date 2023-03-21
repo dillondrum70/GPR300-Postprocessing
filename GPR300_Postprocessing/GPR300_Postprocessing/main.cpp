@@ -68,13 +68,13 @@ float lightScale = .5f;
 
 const int MAX_POINT_LIGHTS = 8;
 PointLight pointLights[MAX_POINT_LIGHTS];
-int pointLightCount = 0;
+int pointLightCount = 4;
 float pointLightRadius = 5.f;
-float pointLightHeight = 5.f;
+float pointLightHeight = 2.f;
 
 const int MAX_DIRECTIONAL_LIGHTS = 8;
 DirectionalLight directionalLights[MAX_DIRECTIONAL_LIGHTS];
-int directionalLightCount = 1;
+int directionalLightCount = 0;
 float directionalLightAngle = 180.f;	//Angle towards center, 0 is down, + is towards the center, - is away from the center
 
 const int MAX_SPOTLIGHTS = 8;
@@ -88,7 +88,7 @@ float constantAttenuation = 1.f;
 float linearAttenuation = .35f;
 float quadraticAttenuation = .44f;
 
-bool manuallyMoveLights = true;	//If true, allows you to move point lights manually
+bool manuallyMoveLights = false;	//If true, allows you to move point lights manually
 
 bool phong = true;
 
@@ -102,7 +102,7 @@ const std::string NORM_FILENAME_PAVING_STONES = "PavingStones130_4K_NormalGL.jpg
 
 int currentTextureIndex = 0;
 
-glm::vec3 brightColor = glm::vec3(0.2f, 0.7f, 0.07f);
+glm::vec3 brightColor = glm::vec3(1, 1, 1);
 float brightnessThreshold = .95f;
 
 int main() {
@@ -267,6 +267,14 @@ int main() {
 	Shader* blurShader = new Shader("shaders/blit.vert", "shaders/blur.frag");
 	BlurEffect blurEffect = BlurEffect(blurShader, "Gaussian Blur");
 	fbo.AddEffect(&blurEffect);
+
+	//Blur shader and effect specific to the bloom effect
+	Shader* blurBloomShader = new Shader("shaders/blit.vert", "shaders/blur.frag");
+	BlurEffect blurBloomEffect = BlurEffect(blurBloomShader, "Gaussian Blur");
+
+	Shader* bloomShader = new Shader("shaders/blit.vert", "shaders/bloom.frag");
+	BloomEffect bloomEffect = BloomEffect(bloomShader, "Bloom", &quadMesh, &blurBloomEffect);
+	fbo.AddEffect(&bloomEffect);
 	
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
@@ -446,7 +454,7 @@ int main() {
 		
 		//Default framebuffer was cleared at the beginning of the loop
 		
-		glActiveTexture(GL_TEXTURE0 + colorBuffer.GetTexture());
+		/*glActiveTexture(GL_TEXTURE0 + colorBuffer.GetTexture());
 		glBindTexture(GL_TEXTURE_2D, colorBuffer.GetTexture());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
@@ -454,7 +462,7 @@ int main() {
 		glActiveTexture(GL_TEXTURE0 + secondColorBuffer.GetTexture());
 		glBindTexture(GL_TEXTURE_2D, secondColorBuffer.GetTexture());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);*/
 
 		//Draw fullscreen quads with the current shader selected in fbo
 		fbo.SetupShader();
@@ -580,6 +588,9 @@ int main() {
 		glfwSwapBuffers(window);
 	}
 
+	delete bloomShader;
+	delete blurBloomShader;
+	delete blurShader;
 	delete edgeDetectShader;
 	delete invertShader;
 	delete grayscaleShader;
