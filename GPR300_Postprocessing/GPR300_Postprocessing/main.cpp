@@ -30,6 +30,8 @@
 #include "DirectionalLight.h"
 #include "SpotLight.h"
 
+#include "FramebufferObject.h"
+
 void processInput(GLFWwindow* window);
 void resizeFrameBufferCallback(GLFWwindow* window, int width, int height);
 void keyboardCallback(GLFWwindow* window, int keycode, int scancode, int action, int mods);
@@ -138,6 +140,9 @@ int main() {
 	//Used to draw light sphere
 	Shader unlitShader("shaders/defaultLit.vert", "shaders/unlit.frag");
 
+	//Used to blit framebuffer to screen
+	Shader blitShader("shaders/blit.vert", "shaders/blit.frag");
+
 	ew::MeshData cubeMeshData;
 	ew::createCube(1.0f, 1.0f, 1.0f, cubeMeshData);
 	ew::MeshData sphereMeshData;
@@ -146,11 +151,14 @@ int main() {
 	ew::createCylinder(1.0f, 0.5f, 64, cylinderMeshData);
 	ew::MeshData planeMeshData;
 	ew::createPlane(1.0f, 1.0f, planeMeshData);
+	ew::MeshData quadMeshData;
+	ew::createQuad(2, 2, quadMeshData);
 
 	ew::Mesh cubeMesh(&cubeMeshData);
 	ew::Mesh sphereMesh(&sphereMeshData);
 	ew::Mesh planeMesh(&planeMeshData);
 	ew::Mesh cylinderMesh(&cylinderMeshData);
+	ew::Mesh quadMesh(&quadMeshData);
 
 	//Enable back face culling
 	glEnable(GL_CULL_FACE);
@@ -183,6 +191,7 @@ int main() {
 	ew::Transform planeTransform;
 	ew::Transform cylinderTransform;
 	ew::Transform lightTransform;
+	ew::Transform quadTransform;
 
 	cubeTransform.position = glm::vec3(-2.0f, 0.0f, 0.0f);
 	sphereTransform.position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -219,10 +228,28 @@ int main() {
 	directionalLights[6].color = glm::vec3(1, 1, 0);
 	directionalLights[7].color = glm::vec3(0, 1, 0);
 
+	//If this is created after all texutres are loaded (and all the textures haven't been used) then it shouldn't overwrite or be overwritten by any textures
+	ColorBuffer colorBuffer;
+	colorBuffer.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
+	
+	DepthBuffer depthBuffer;
+	depthBuffer.Create(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	FramebufferObject fbo;
+	fbo.Create();
+	fbo.AddColorAttachment(colorBuffer, GL_COLOR_ATTACHMENT0);
+	fbo.AddDepthAttachment(depthBuffer);
+
+	printf("Framebuffer - %i\nColor Buffer - %i \nDepth Buffer - %i", fbo.GetId(), colorBuffer.GetTexture(), depthBuffer.GetRenderBuffer());
+
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
-		glClearColor(bgColor.r,bgColor.g,bgColor.b, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//Check framebuffer object is complete
+		if (!fbo.IsComplete())
+		{
+			printf("Framebuffer Object is incomplete\n\0");
+		}
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -231,6 +258,10 @@ int main() {
 		float time = (float)glfwGetTime();
 		deltaTime = time - lastFrameTime;
 		lastFrameTime = time;
+
+		//Bind and clear frame buffer
+		fbo.Bind();
+		fbo.Clear(bgColor);
 
 		//Draw
 		litShader.use();
@@ -376,6 +407,21 @@ int main() {
 			cylinderMesh.draw();
 		}
 
+		//After drawing, bind to default framebuffer, clear it, and draw the fullscreen quad with the shader
+		fbo.Unbind(glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT));
+		glClearColor(bgColor.r, bgColor.g, bgColor.b, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		//Default framebuffer was cleared at the beginning of the loop
+		
+		glActiveTexture(GL_TEXTURE0 + colorBuffer.GetTexture());
+		glBindTexture(GL_TEXTURE_2D, colorBuffer.GetTexture());
+
+		//Draw fullscreen quad
+		blitShader.use();
+		blitShader.setInt("_ColorTex", colorBuffer.GetTexture());
+		quadMesh.draw();
+
 		//Material
 		defaultMat.ExposeImGui();
 
@@ -484,6 +530,8 @@ int main() {
 
 		glfwSwapBuffers(window);
 	}
+
+	fbo.Destroy();
 
 	glfwTerminate();
 	return 0;

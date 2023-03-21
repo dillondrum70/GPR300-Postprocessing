@@ -142,9 +142,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="EW\Mesh.cpp" />
     <ClCompile Include="EW\Shader.cpp" />
+    <ClCompile Include="Source\ColorBuffer.cpp" />
+    <ClCompile Include="Source\DepthBuffer.cpp" />
     <ClCompile Include="Source\DirectionalLight.cpp" />
+    <ClCompile Include="Source\FramebufferObject.cpp" />
     <ClCompile Include="Source\PointLight.cpp" />
     <ClCompile Include="Source\Material.cpp" />
+    <ClCompile Include="Source\RenderBufferObject.cpp" />
     <ClCompile Include="Source\SpotLight.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\TextureManager.cpp" />
@@ -165,12 +169,21 @@
     <ClInclude Include="EW\ShapeGen.h" />
     <ClInclude Include="EW\Shader.h" />
     <ClInclude Include="EW\Transform.h" />
+    <ClInclude Include="Source\ColorBuffer.h" />
+    <ClInclude Include="Source\DepthBuffer.h" />
     <ClInclude Include="Source\DirectionalLight.h" />
+    <ClInclude Include="Source\FramebufferObject.h" />
     <ClInclude Include="Source\PointLight.h" />
     <ClInclude Include="Source\Material.h" />
+    <ClInclude Include="Source\PostprocessEffects.h" />
+    <ClInclude Include="Source\RenderBufferObject.h" />
     <ClInclude Include="Source\SpotLight.h" />
     <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\TextureManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\blit.frag" />
+    <None Include="shaders\blit.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
