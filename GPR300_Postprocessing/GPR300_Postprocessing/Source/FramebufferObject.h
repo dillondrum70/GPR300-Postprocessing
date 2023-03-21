@@ -14,6 +14,7 @@
 
 #include "Postprocessing/PostprocessEffect.h"
 #include "Postprocessing/GrayscaleEffect.h"
+#include "Postprocessing/InvertEffect.h"
 
 class FramebufferObject
 {

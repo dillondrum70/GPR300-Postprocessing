@@ -149,6 +149,7 @@
     <ClCompile Include="Source\PointLight.cpp" />
     <ClCompile Include="Source\Material.cpp" />
     <ClCompile Include="Source\Postprocessing\GrayscaleEffect.cpp" />
+    <ClCompile Include="Source\Postprocessing\InvertEffect.cpp" />
     <ClCompile Include="Source\Postprocessing\PostprocessEffect.cpp" />
     <ClCompile Include="Source\SpotLight.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Source\PostprocessEffect.h" />
     <ClInclude Include="Source\PostprocessEffects.h" />
     <ClInclude Include="Source\Postprocessing\GrayscaleEffect.h" />
+    <ClInclude Include="Source\Postprocessing\InvertEffect.h" />
     <ClInclude Include="Source\Postprocessing\PostprocessEffect.h" />
     <ClInclude Include="Source\SpotLight.h" />
     <ClInclude Include="Source\Texture.h" />
@@ -189,6 +191,7 @@
     <None Include="shaders\blit.frag" />
     <None Include="shaders\blit.vert" />
     <None Include="shaders\grayscale.frag" />
+    <None Include="shaders\invert.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
