@@ -16,6 +16,8 @@ public:
 protected:
 
 	float _aberrationAmount = 0.01f;
+	float _flickerSpeed = 10.f;
+	float _flickerAmount = .1f;
 };
 
 #endif
