@@ -34,12 +34,16 @@ void FramebufferObject::AddColorAttachment(ColorBuffer& buffer, GLenum attachmen
 	glFramebufferTexture2D(GL_FRAMEBUFFER, attachmentNum, GL_TEXTURE_2D, buffer.GetTexture(), 0);
 
 	screenDimensions = buffer.GetDimensions();
+
+	colorAttachments.push_back(buffer.GetTexture());
 }
 
 
 void FramebufferObject::AddDepthAttachment(DepthBuffer& buffer)
 {
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, buffer.GetRenderBuffer());
+
+	depthAttachments.push_back(buffer.GetRenderBuffer());
 }
 
 void FramebufferObject::Bind()
@@ -102,7 +106,7 @@ void FramebufferObject::AddEffect(PostprocessEffect& effect)
 	postprocessEffects.push_back(effect);
 }
 
-void FramebufferObject::SetupShader(unsigned int colorBuffer)
+void FramebufferObject::SetupShader()
 {
 	if (currentEffect >= postprocessEffects.size())
 	{
@@ -110,5 +114,5 @@ void FramebufferObject::SetupShader(unsigned int colorBuffer)
 		return;
 	}
 
-	postprocessEffects[currentEffect].SetupShader(colorBuffer);
+	postprocessEffects[currentEffect].SetupShader(colorAttachments[0]);
 }

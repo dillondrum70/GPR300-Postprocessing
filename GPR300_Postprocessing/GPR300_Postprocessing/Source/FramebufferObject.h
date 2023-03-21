@@ -36,12 +36,15 @@ public:
 
 	void AddEffect(PostprocessEffect& effect);
 
-	void SetupShader(unsigned int colorBuffer);
+	void SetupShader();
 
 private:
 
 	unsigned int id;
 	glm::vec2 screenDimensions;
+
+	std::vector<unsigned int> colorAttachments;
+	std::vector<unsigned int> depthAttachments;
 
 	int currentEffect = 0;
 	std::vector<PostprocessEffect> postprocessEffects;

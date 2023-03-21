@@ -422,8 +422,8 @@ int main() {
 		glActiveTexture(GL_TEXTURE0 + colorBuffer.GetTexture());
 		glBindTexture(GL_TEXTURE_2D, colorBuffer.GetTexture());
 
-		//Draw fullscreen quads
-		fbo.SetupShader(colorBuffer.GetTexture());
+		//Draw fullscreen quads with the current shader selected in fbo
+		fbo.SetupShader();
 		quadMesh.draw();
 
 		//Material
