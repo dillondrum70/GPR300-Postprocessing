@@ -71,3 +71,44 @@ void FramebufferObject::Destroy()
 {
 	glDeleteFramebuffers(1, &id);
 }
+
+
+void FramebufferObject::ExposeImGui()
+{
+	if (ImGui::BeginCombo("Postprocessing Effect", postprocessEffects[currentEffect].GetName().c_str(), ImGuiComboFlags_None))
+	{
+		for (int i = 0; i < postprocessEffects.size(); i++)
+		{
+			bool selected = postprocessEffects[currentEffect].GetName() == postprocessEffects[i].GetName();
+
+			if (ImGui::Selectable(postprocessEffects[i].GetName().c_str(), selected))
+			{
+				currentEffect = i;
+			}
+
+			if (selected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	postprocessEffects[currentEffect].ExposeImGui();
+}
+
+void FramebufferObject::AddEffect(PostprocessEffect& effect)
+{
+	postprocessEffects.push_back(effect);
+}
+
+void FramebufferObject::SetupShader(unsigned int colorBuffer)
+{
+	if (currentEffect >= postprocessEffects.size())
+	{
+		printf("Postprocessing effect vector out of bounds");
+		return;
+	}
+
+	postprocessEffects[currentEffect].SetupShader(colorBuffer);
+}

@@ -148,7 +148,8 @@
     <ClCompile Include="Source\FramebufferObject.cpp" />
     <ClCompile Include="Source\PointLight.cpp" />
     <ClCompile Include="Source\Material.cpp" />
-    <ClCompile Include="Source\RenderBufferObject.cpp" />
+    <ClCompile Include="Source\Postprocessing\GrayscaleEffect.cpp" />
+    <ClCompile Include="Source\Postprocessing\PostprocessEffect.cpp" />
     <ClCompile Include="Source\SpotLight.cpp" />
     <ClCompile Include="Source\Texture.cpp" />
     <ClCompile Include="Source\TextureManager.cpp" />
@@ -173,10 +174,13 @@
     <ClInclude Include="Source\DepthBuffer.h" />
     <ClInclude Include="Source\DirectionalLight.h" />
     <ClInclude Include="Source\FramebufferObject.h" />
+    <ClInclude Include="Source\GrayscaleEffect.h" />
     <ClInclude Include="Source\PointLight.h" />
     <ClInclude Include="Source\Material.h" />
+    <ClInclude Include="Source\PostprocessEffect.h" />
     <ClInclude Include="Source\PostprocessEffects.h" />
-    <ClInclude Include="Source\RenderBufferObject.h" />
+    <ClInclude Include="Source\Postprocessing\GrayscaleEffect.h" />
+    <ClInclude Include="Source\Postprocessing\PostprocessEffect.h" />
     <ClInclude Include="Source\SpotLight.h" />
     <ClInclude Include="Source\Texture.h" />
     <ClInclude Include="Source\TextureManager.h" />
@@ -184,6 +188,7 @@
   <ItemGroup>
     <None Include="shaders\blit.frag" />
     <None Include="shaders\blit.vert" />
+    <None Include="shaders\grayscale.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

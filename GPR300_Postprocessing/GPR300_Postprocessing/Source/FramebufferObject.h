@@ -1,6 +1,8 @@
 #ifndef FRAMEBUFFER_OBJECT_H
 #define FRAMEBUFFER_OBJECT_H
 
+#include <vector>
+
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
@@ -9,6 +11,9 @@
 
 #include "ColorBuffer.h"
 #include "DepthBuffer.h"
+
+#include "Postprocessing/PostprocessEffect.h"
+#include "Postprocessing/GrayscaleEffect.h"
 
 class FramebufferObject
 {
@@ -27,10 +32,19 @@ public:
 	void Clear(glm::vec3 clearColor);
 	void Destroy();
 
+	void ExposeImGui();
+
+	void AddEffect(PostprocessEffect& effect);
+
+	void SetupShader(unsigned int colorBuffer);
+
 private:
 
 	unsigned int id;
 	glm::vec2 screenDimensions;
+
+	int currentEffect = 0;
+	std::vector<PostprocessEffect> postprocessEffects;
 };
 
 #endif

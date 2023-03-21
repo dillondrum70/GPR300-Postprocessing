@@ -78,7 +78,10 @@
     <ClCompile Include="Source\DepthBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\RenderBufferObject.cpp">
+    <ClCompile Include="Source\Postprocessing\GrayscaleEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Postprocessing\PostprocessEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -158,12 +161,22 @@
     <ClInclude Include="Source\DepthBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\RenderBufferObject.h">
+    <ClInclude Include="Source\PostprocessEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GrayscaleEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Postprocessing\GrayscaleEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Postprocessing\PostprocessEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\blit.frag" />
     <None Include="shaders\blit.vert" />
+    <None Include="shaders\grayscale.frag" />
   </ItemGroup>
 </Project>

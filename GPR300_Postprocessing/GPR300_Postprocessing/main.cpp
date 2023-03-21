@@ -140,9 +140,6 @@ int main() {
 	//Used to draw light sphere
 	Shader unlitShader("shaders/defaultLit.vert", "shaders/unlit.frag");
 
-	//Used to blit framebuffer to screen
-	Shader blitShader("shaders/blit.vert", "shaders/blit.frag");
-
 	ew::MeshData cubeMeshData;
 	ew::createCube(1.0f, 1.0f, 1.0f, cubeMeshData);
 	ew::MeshData sphereMeshData;
@@ -240,8 +237,16 @@ int main() {
 	fbo.AddColorAttachment(colorBuffer, GL_COLOR_ATTACHMENT0);
 	fbo.AddDepthAttachment(depthBuffer);
 
-	printf("Framebuffer - %i\nColor Buffer - %i \nDepth Buffer - %i", fbo.GetId(), colorBuffer.GetTexture(), depthBuffer.GetRenderBuffer());
+	Shader* blitShader = new Shader("shaders/blit.vert", "shaders/blit.frag");
+	PostprocessEffect noEffect = PostprocessEffect(blitShader, "None");
 
+	fbo.AddEffect(noEffect);
+
+	Shader* grayscaleShader = new Shader("shaders/blit.vert", "shaders/grayscale.frag");
+	GrayscaleEffect grayscaleEffect = GrayscaleEffect(grayscaleShader, "Grayscale");
+
+	fbo.AddEffect(grayscaleEffect);
+	
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
@@ -417,9 +422,8 @@ int main() {
 		glActiveTexture(GL_TEXTURE0 + colorBuffer.GetTexture());
 		glBindTexture(GL_TEXTURE_2D, colorBuffer.GetTexture());
 
-		//Draw fullscreen quad
-		blitShader.use();
-		blitShader.setInt("_ColorTex", colorBuffer.GetTexture());
+		//Draw fullscreen quads
+		fbo.SetupShader(colorBuffer.GetTexture());
 		quadMesh.draw();
 
 		//Material
@@ -436,6 +440,14 @@ int main() {
 		ImGui::Text("GL Falloff Attenuation");
 		ImGui::SliderFloat("Linear", &linearAttenuation, .0014f, 1.f);
 		ImGui::SliderFloat("Quadratic", &quadraticAttenuation, .000007f, 2.0f);
+
+		ImGui::End();
+
+		//Post Processing
+		ImGui::SetNextWindowSize(ImVec2(0, 0));	//Size to fit content
+		ImGui::Begin("Post Processing");
+
+		fbo.ExposeImGui();
 
 		ImGui::End();
 
@@ -532,6 +544,9 @@ int main() {
 	}
 
 	fbo.Destroy();
+
+	delete grayscaleShader;
+	delete blitShader;
 
 	glfwTerminate();
 	return 0;
