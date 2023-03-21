@@ -96,6 +96,9 @@
     <ClCompile Include="Source\Postprocessing\BlurEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Postprocessing\BloomEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EW\Shader.h">
@@ -195,6 +198,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Postprocessing\BlurEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Postprocessing\BloomEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

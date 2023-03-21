@@ -27,6 +27,7 @@ public:
 	~FramebufferObject();
 
 	unsigned int GetId() { return id; }
+	glm::vec2 GetDimensions() { return screenDimensions; }
 	bool IsComplete();
 
 	void Create();

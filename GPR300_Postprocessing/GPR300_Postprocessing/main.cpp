@@ -102,6 +102,9 @@ const std::string NORM_FILENAME_PAVING_STONES = "PavingStones130_4K_NormalGL.jpg
 
 int currentTextureIndex = 0;
 
+glm::vec3 brightColor = glm::vec3(0.2f, 0.7f, 0.07f);
+float brightnessThreshold = .95f;
+
 int main() {
 	if (!glfwInit()) {
 		printf("glfw failed to init");
@@ -290,6 +293,8 @@ int main() {
 
 		//Draw
 		litShader.use();
+		litShader.setVec3("_BrightColor", brightColor);	//Used in bloom
+		litShader.setFloat("_BrightnessThreshold", brightnessThreshold);	//Used in bloom
 		litShader.setMat4("_Projection", camera.getProjectionMatrix());
 		litShader.setMat4("_View", camera.getViewMatrix());
 
@@ -414,6 +419,8 @@ int main() {
 
 		//Draw light as a small sphere using unlit shader, ironically.
 		unlitShader.use();
+		unlitShader.setVec3("_BrightColor", brightColor);	//Used in bloom
+		unlitShader.setFloat("_BrightnessThreshold", brightnessThreshold);	//Used in bloom
 		unlitShader.setMat4("_Projection", camera.getProjectionMatrix());
 		unlitShader.setMat4("_View", camera.getViewMatrix());
 		for (size_t i = 0; i < pointLightCount; i++)
@@ -473,6 +480,9 @@ int main() {
 		//Post Processing
 		ImGui::SetNextWindowSize(ImVec2(0, 0));	//Size to fit content
 		ImGui::Begin("Post Processing");
+
+		ImGui::SliderFloat3("Bloom Bright Color", &brightColor.x, 0, 1);
+		ImGui::SliderFloat("Brightness Threshold", &brightnessThreshold, 0.0f, 1.0f);
 
 		fbo.ExposeImGui();
 

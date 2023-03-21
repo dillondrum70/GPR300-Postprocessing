@@ -1,5 +1,7 @@
 #include "PostprocessEffect.h"
 
+#include "FramebufferObject.h"
+
 PostprocessEffect::PostprocessEffect(Shader* shader, std::string name)
 {
 	_shader = shader;

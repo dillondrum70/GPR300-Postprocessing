@@ -11,6 +11,10 @@ in struct Vertex
     mat3 TBN;   //Tangent to worldspace change of basis transform
 }vert_out;
 
+
+uniform vec3 _BrightColor;
+uniform float _BrightnessThreshold;
+
 //Uniforms from application
 
 struct Attenuation
@@ -238,5 +242,13 @@ void main()
     FragColor = texture(_Textures[_CurrentTexture].texSampler, uv) * vec4(ambient + diffuse + specular, 1.0f);
     //FragColor = vec4(vert_out.UV.x, vert_out.UV.y, 0, 1);
     //FragColor = vec4(normal, 1);
-    BrightColor = FragColor;
+    float brightness = dot(FragColor.rgb, _BrightColor);
+    if(brightness > _BrightnessThreshold)
+    {
+        BrightColor = vec4(FragColor.rgb, 1.0);
+    }
+    else
+    {
+        BrightColor = vec4(0, 0, 0, 1.0);
+    }
 }

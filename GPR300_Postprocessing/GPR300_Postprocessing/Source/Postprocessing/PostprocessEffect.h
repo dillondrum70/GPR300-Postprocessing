@@ -7,6 +7,8 @@
 
 #include <vector>
 
+class FramebufferObject;
+
 class PostprocessEffect
 {
 public:
@@ -19,6 +21,8 @@ public:
 	
 	Shader* GetShader() { return _shader; }
 	std::string GetName() { return _name; }
+
+	FramebufferObject* parent;
 
 protected:
 
