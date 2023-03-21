@@ -148,6 +148,7 @@
     <ClCompile Include="Source\FramebufferObject.cpp" />
     <ClCompile Include="Source\PointLight.cpp" />
     <ClCompile Include="Source\Material.cpp" />
+    <ClCompile Include="Source\Postprocessing\EdgeDetectEffect.cpp" />
     <ClCompile Include="Source\Postprocessing\GrayscaleEffect.cpp" />
     <ClCompile Include="Source\Postprocessing\InvertEffect.cpp" />
     <ClCompile Include="Source\Postprocessing\PostprocessEffect.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\PostprocessEffect.h" />
     <ClInclude Include="Source\PostprocessEffects.h" />
+    <ClInclude Include="Source\Postprocessing\EdgeDetectEffect.h" />
     <ClInclude Include="Source\Postprocessing\GrayscaleEffect.h" />
     <ClInclude Include="Source\Postprocessing\InvertEffect.h" />
     <ClInclude Include="Source\Postprocessing\PostprocessEffect.h" />
@@ -190,6 +192,7 @@
   <ItemGroup>
     <None Include="shaders\blit.frag" />
     <None Include="shaders\blit.vert" />
+    <None Include="shaders\edgeDetect.frag" />
     <None Include="shaders\grayscale.frag" />
     <None Include="shaders\invert.frag" />
   </ItemGroup>

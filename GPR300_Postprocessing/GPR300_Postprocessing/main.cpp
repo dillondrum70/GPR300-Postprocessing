@@ -239,15 +239,19 @@ int main() {
 
 	Shader* blitShader = new Shader("shaders/blit.vert", "shaders/blit.frag");
 	PostprocessEffect noEffect = PostprocessEffect(blitShader, "None");
-	fbo.AddEffect(noEffect);
+	fbo.AddEffect(&noEffect);
 
 	Shader* grayscaleShader = new Shader("shaders/blit.vert", "shaders/grayscale.frag");
 	GrayscaleEffect grayscaleEffect = GrayscaleEffect(grayscaleShader, "Grayscale");
-	fbo.AddEffect(grayscaleEffect);
+	fbo.AddEffect(&grayscaleEffect);
 
 	Shader* invertShader = new Shader("shaders/blit.vert", "shaders/invert.frag");
 	InvertEffect invertEffect = InvertEffect(invertShader, "Invert");
-	fbo.AddEffect(invertEffect);
+	fbo.AddEffect(&invertEffect);
+
+	Shader* edgeDetectShader = new Shader("shaders/blit.vert", "shaders/edgeDetect.frag");
+	EdgeDetectEffect edgeDetectEffect = EdgeDetectEffect(edgeDetectShader, "Edge Detection");
+	fbo.AddEffect(&edgeDetectEffect);
 	
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
@@ -545,11 +549,10 @@ int main() {
 		glfwSwapBuffers(window);
 	}
 
+	delete edgeDetectShader;
 	delete invertShader;
 	delete grayscaleShader;
 	delete blitShader;
-
-	fbo.Destroy();
 
 	glfwTerminate();
 	return 0;

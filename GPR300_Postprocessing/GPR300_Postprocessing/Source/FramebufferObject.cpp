@@ -10,6 +10,11 @@ FramebufferObject::FramebufferObject()
 	screenDimensions = glm::vec2(0, 0);
 }
 
+FramebufferObject::~FramebufferObject()
+{
+	Destroy();
+}
+
 bool FramebufferObject::IsComplete()
 {
 	Bind();
@@ -73,19 +78,21 @@ void FramebufferObject::Clear(glm::vec3 clearColor)
 
 void FramebufferObject::Destroy()
 {
+	postprocessEffects.clear();
+
 	glDeleteFramebuffers(1, &id);
 }
 
 
 void FramebufferObject::ExposeImGui()
 {
-	if (ImGui::BeginCombo("Postprocessing Effect", postprocessEffects[currentEffect].GetName().c_str(), ImGuiComboFlags_None))
+	if (ImGui::BeginCombo("Postprocessing Effect", postprocessEffects[currentEffect]->GetName().c_str(), ImGuiComboFlags_None))
 	{
 		for (int i = 0; i < postprocessEffects.size(); i++)
 		{
-			bool selected = postprocessEffects[currentEffect].GetName() == postprocessEffects[i].GetName();
+			bool selected = postprocessEffects[currentEffect]->GetName() == postprocessEffects[i]->GetName();
 
-			if (ImGui::Selectable(postprocessEffects[i].GetName().c_str(), selected))
+			if (ImGui::Selectable(postprocessEffects[i]->GetName().c_str(), selected))
 			{
 				currentEffect = i;
 			}
@@ -98,10 +105,10 @@ void FramebufferObject::ExposeImGui()
 		ImGui::EndCombo();
 	}
 
-	postprocessEffects[currentEffect].ExposeImGui();
+	postprocessEffects[currentEffect]->ExposeImGui();
 }
 
-void FramebufferObject::AddEffect(PostprocessEffect& effect)
+void FramebufferObject::AddEffect(PostprocessEffect* effect)
 {
 	postprocessEffects.push_back(effect);
 }
@@ -114,5 +121,5 @@ void FramebufferObject::SetupShader()
 		return;
 	}
 
-	postprocessEffects[currentEffect].SetupShader(colorAttachments[0]);
+	postprocessEffects[currentEffect]->SetupShader(colorAttachments[0]);
 }

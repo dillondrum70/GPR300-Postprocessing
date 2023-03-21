@@ -87,6 +87,9 @@
     <ClCompile Include="Source\Postprocessing\InvertEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Postprocessing\EdgeDetectEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EW\Shader.h">
@@ -179,11 +182,15 @@
     <ClInclude Include="Source\Postprocessing\InvertEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Postprocessing\EdgeDetectEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\blit.frag" />
     <None Include="shaders\blit.vert" />
     <None Include="shaders\grayscale.frag" />
     <None Include="shaders\invert.frag" />
+    <None Include="shaders\edgeDetect.frag" />
   </ItemGroup>
 </Project>

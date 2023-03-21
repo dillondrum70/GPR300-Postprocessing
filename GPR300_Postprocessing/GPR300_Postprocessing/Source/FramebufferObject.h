@@ -15,12 +15,14 @@
 #include "Postprocessing/PostprocessEffect.h"
 #include "Postprocessing/GrayscaleEffect.h"
 #include "Postprocessing/InvertEffect.h"
+#include "Postprocessing/EdgeDetectEffect.h"
 
 class FramebufferObject
 {
 public:
 
 	FramebufferObject();
+	~FramebufferObject();
 
 	unsigned int GetId() { return id; }
 	bool IsComplete();
@@ -35,7 +37,7 @@ public:
 
 	void ExposeImGui();
 
-	void AddEffect(PostprocessEffect& effect);
+	void AddEffect(PostprocessEffect* effect);
 
 	void SetupShader();
 
@@ -48,7 +50,7 @@ private:
 	std::vector<unsigned int> depthAttachments;
 
 	int currentEffect = 0;
-	std::vector<PostprocessEffect> postprocessEffects;
+	std::vector<PostprocessEffect*> postprocessEffects;
 };
 
 #endif
