@@ -41,8 +41,6 @@ void BloomEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 	_shader->setInt("_ColorTex", colorBuffers[1]);
 
 	return;*/
-
-	blurBuffer.Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
 	
 	FramebufferObject fboBlur;
 	fboBlur.Create();
@@ -107,6 +105,8 @@ void BloomEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 void BloomEffect::SetParent(FramebufferObject* parent)
 {
 	PostprocessEffect::SetParent(parent);
+
+	blurBuffer.Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
 
 	//firstBuffer.Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
 
