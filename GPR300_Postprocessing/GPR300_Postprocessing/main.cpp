@@ -252,6 +252,10 @@ int main() {
 	Shader* edgeDetectShader = new Shader("shaders/blit.vert", "shaders/edgeDetect.frag");
 	EdgeDetectEffect edgeDetectEffect = EdgeDetectEffect(edgeDetectShader, "Edge Detection");
 	fbo.AddEffect(&edgeDetectEffect);
+
+	Shader* chromaticShader = new Shader("shaders/blit.vert", "shaders/chromatic.frag");
+	ChromaticEffect chromaticEffect = ChromaticEffect(chromaticShader, "Chromatic Aberration");
+	fbo.AddEffect(&chromaticEffect);
 	
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
@@ -427,6 +431,8 @@ int main() {
 		
 		glActiveTexture(GL_TEXTURE0 + colorBuffer.GetTexture());
 		glBindTexture(GL_TEXTURE_2D, colorBuffer.GetTexture());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 
 		//Draw fullscreen quads with the current shader selected in fbo
 		fbo.SetupShader();

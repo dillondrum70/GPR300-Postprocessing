@@ -16,6 +16,7 @@
 #include "Postprocessing/GrayscaleEffect.h"
 #include "Postprocessing/InvertEffect.h"
 #include "Postprocessing/EdgeDetectEffect.h"
+#include "Postprocessing/ChromaticEffect.h"
 
 class FramebufferObject
 {
