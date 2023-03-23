@@ -9,7 +9,7 @@ BloomEffect::BloomEffect(Shader* shader, std::string name, ew::Mesh* quadMesh, B
 	_quadMesh = quadMesh; 
 	_blurEffect = blurEffect; 
 
-	blurBuffer = ColorBuffer();
+	//blurBuffer = ColorBuffer();
 	//secondBuffer = ColorBuffer();
 
 	//fboBlur = new FramebufferObject();

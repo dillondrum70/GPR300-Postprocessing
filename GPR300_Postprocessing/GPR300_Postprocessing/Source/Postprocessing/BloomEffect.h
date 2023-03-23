@@ -24,8 +24,7 @@ public:
 
 protected:
 
-	//unsigned int blurFbos[2];
-	//unsigned int blurBuffers[2];
+	//Must be a dynamic pointer object since undefined with foward declaration, otherwise we need to create a new one every frame
 	std::vector<FramebufferObject*> blurFbos;
 	ColorBuffer blurBuffers[2];
 
@@ -36,12 +35,6 @@ protected:
 
 	BlurEffect* _blurEffect;
 
-	ColorBuffer blurBuffer;
-	ColorBuffer blurBuffer2;
-	//ColorBuffer secondBuffer;	//We can use this to make several blur passes
-
-	//Must be a dynamic pointer object since undefined with foward declaration, otherwise we need to create a new one every frame
-	//FramebufferObject* fboBlur;
 };
 
 #endif

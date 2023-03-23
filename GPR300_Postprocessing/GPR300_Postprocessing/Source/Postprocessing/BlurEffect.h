@@ -3,20 +3,36 @@
 
 #include "PostprocessEffect.h"
 
+#include "ColorBuffer.h"
+
+#include "../EW/Mesh.h"
+
+class FramebufferObject;
+
 class BlurEffect : public PostprocessEffect
 {
 public:
 
-	BlurEffect(Shader* shader, std::string name) : PostprocessEffect(shader, name) {};
+	BlurEffect(Shader* shader, std::string name, ew::Mesh* quadMesh);
+	~BlurEffect();
 
 	void ExposeImGui() override;
 
 	void SetupShader(const std::vector<unsigned int>& colorBuffers) override;
 
+	void SetParent(FramebufferObject* parent) override;
+
 protected:
 
+	std::vector<FramebufferObject*> blurFbos;
+	ColorBuffer blurBuffers[2];
+
+	ew::Mesh* _quadMesh;
+
+	int _samples = 5;
 	float _blurStrength = 1;
-	bool _horizontal = false;
+
+	
 };
 
 #endif

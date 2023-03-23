@@ -265,12 +265,12 @@ int main() {
 	fbo.AddEffect(&chromaticEffect);
 
 	Shader* blurShader = new Shader("shaders/blit.vert", "shaders/blur.frag");
-	BlurEffect blurEffect = BlurEffect(blurShader, "Gaussian Blur");
+	BlurEffect blurEffect = BlurEffect(blurShader, "Gaussian Blur", &quadMesh);
 	fbo.AddEffect(&blurEffect);
 
 	//Blur shader and effect specific to the bloom effect
 	Shader* blurBloomShader = new Shader("shaders/blit.vert", "shaders/blur.frag");
-	BlurEffect blurBloomEffect = BlurEffect(blurBloomShader, "Gaussian Blur");
+	BlurEffect blurBloomEffect = BlurEffect(blurBloomShader, "Gaussian Blur", &quadMesh);
 
 	Shader* bloomShader = new Shader("shaders/blit.vert", "shaders/bloom.frag");
 	BloomEffect bloomEffect = BloomEffect(bloomShader, "Bloom", &quadMesh, &blurBloomEffect);
