@@ -13,92 +13,97 @@ BloomEffect::BloomEffect(Shader* shader, std::string name, ew::Mesh* quadMesh, B
 	//secondBuffer = ColorBuffer();
 
 	//fboBlur = new FramebufferObject();
+	
+	//glGenFramebuffers(2, blurFbos);
+
+	//Create temp fbos
+	for (int i = 0; i < 2; i++)
+	{
+		FramebufferObject* fbo = new FramebufferObject();
+		fbo->Create();
+		blurFbos.push_back(fbo);
+	}
 }
 
 BloomEffect::~BloomEffect()
 {
-	/*if (fboBlur)
+	//Delete temp fbos
+	for (int i = blurFbos.size() - 1; i >= 0; i--)
 	{
-		delete fboBlur;
+		if (blurFbos[i] != nullptr)
+		{
+			delete blurFbos[i];
+			blurFbos[i] = nullptr;
+		}
 	}
-	
-	fboBlur = nullptr;*/
+
+	blurFbos.clear();
 }
 
 void BloomEffect::ExposeImGui()
 {
 	PostprocessEffect::ExposeImGui();
 
-	_blurEffect->ExposeImGui();
+	ImGui::SliderInt("Samples", &_samples, 1, 10);
+	ImGui::SliderFloat("Blur Strength", &_blurStrength, 1, 10);
+	
+	//_blurEffect->ExposeImGui();
 }
 
 
 void BloomEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 {
-	//PostprocessEffect::SetupShader(colorBuffers);
-	
-	/*_shader->use();
-	_shader->setInt("_ColorTex", colorBuffers[1]);
-
-	return;*/
-	
-	FramebufferObject fboBlur;
-	fboBlur.Create();
-	fboBlur.AddColorAttachment(blurBuffer, GL_COLOR_ATTACHMENT0);
-	//fboBlur->AddColorAttachment(secondBuffer, GL_COLOR_ATTACHMENT1);
-	fboBlur.AddEffect(_blurEffect);
-
-	//Check if FramebufferObject for blurring the second color buffer is complete
-	if (!fboBlur.IsComplete())
+	//Attach temp color buffers to temp fbos
+	for (unsigned int i = 0; i < 2; i++)
 	{
-		printf("Blur FramebufferObject in BloomEffect is not complete.");
-		return;
+		blurFbos[i]->Bind();
+		blurFbos[i]->AddColorAttachment(blurBuffers[i], GL_COLOR_ATTACHMENT0);
 	}
 
-	//Bind the blur framebuffer and clear it
-	fboBlur.Bind();
-	fboBlur.Clear(glm::vec3(0, 0, 0));
+	//Use blur shader
+	unsigned int tex = colorBuffers[1];
+	bool horizontal = true;
+	_blurEffect->GetShader()->use();
+	_blurEffect->GetShader()->setFloat("_BlurStrength", _blurStrength);
+	for (unsigned int i = 0; i < _samples; i++)
+	{
+		//Bind current fbo
+		blurFbos[horizontal]->Bind();
+		
+		//Bind last texture drawn to
+		glBindTexture(GL_TEXTURE_2D, tex);
 
-	//Texture passed in as _ColorTex that blur effect samples
-	glActiveTexture(GL_TEXTURE0 + colorBuffers[1]);
-	glBindTexture(GL_TEXTURE_2D, colorBuffers[1]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		//Shader variables and draw
+		_blurEffect->GetShader()->setInt("horizontal", horizontal);
+		_blurEffect->GetShader()->setInt("_ColorTex", tex);
+		_quadMesh->draw();
 
-	//Setup the blur shader and draw the fullscreen quad, blurring the second color buffer with bright objects
-	fboBlur.Bind();
-	fboBlur.SetupShader();
-	_blurEffect->GetShader()->setInt("_ColorTex", colorBuffers[1]);	//override the blur effect's original _ColorTex to be the brightness buffer
-	_quadMesh->draw();
+		//Switch blur direction for next pass
+		horizontal = !horizontal;
 
-	//_parent->Bind();
+		//Set texture to sample from in next step (whether another blur or bloom)
+		tex = blurBuffers[!horizontal].GetTexture();
+	}
 
-	//Color data read from the blur effect, fed into the bloom shader as _BlurredBrightTex
-	glActiveTexture(GL_TEXTURE0 + blurBuffer.GetTexture());
-	glBindTexture(GL_TEXTURE_2D, blurBuffer.GetTexture());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-
-	//Original Texture, fed into bloom shader as _ColorTex to have _BlurredBrightTex added to it
+	//Base color map
 	glActiveTexture(GL_TEXTURE0 + colorBuffers[0]);
 	glBindTexture(GL_TEXTURE_2D, colorBuffers[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	
-	//Bind the base color buffer
+
+	//Blurred brightness map
+	glActiveTexture(GL_TEXTURE0 + tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+
+	//Set sampler2Ds for bloom shader
 	_shader->use();
 	_shader->setInt("_ColorTex", colorBuffers[0]);
-	_shader->setInt("_BlurredBrightTex", blurBuffer.GetTexture());
+	_shader->setInt("_BlurredBrightTex", blurBuffers[horizontal].GetTexture());
 
-	//Apply blur to colorBuffers[1]
-
-	//Pass in colorBuffers[1] to bloom.frag as a uniform sampler2D
-
-	//In bloom.frag, sample the _ColorTex and bloom texture then add them
-
-	fboBlur.Destroy();
-
-	//_parent->Bind();
+	//Bind default buffer so the next draw goes to the screen
+	_parent->Unbind(_parent->GetDimensions());
 }
 
 
@@ -106,15 +111,9 @@ void BloomEffect::SetParent(FramebufferObject* parent)
 {
 	PostprocessEffect::SetParent(parent);
 
-	blurBuffer.Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
-
-	//firstBuffer.Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
-
-	////secondBuffer.Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
-
-
-	//fboBlur->Create();
-	//fboBlur->AddColorAttachment(firstBuffer, GL_COLOR_ATTACHMENT0);
-	////fboBlur->AddColorAttachment(secondBuffer, GL_COLOR_ATTACHMENT1);
-	//fboBlur->AddEffect(_blurEffect);
+	//Create buffers based on parent dimensions
+	for (int i = 0; i < 2; i++)
+	{
+		blurBuffers[i].Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
+	}
 }

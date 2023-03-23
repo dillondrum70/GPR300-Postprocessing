@@ -24,11 +24,20 @@ public:
 
 protected:
 
+	//unsigned int blurFbos[2];
+	//unsigned int blurBuffers[2];
+	std::vector<FramebufferObject*> blurFbos;
+	ColorBuffer blurBuffers[2];
+
+	int _samples = 5;
+	float _blurStrength = 1;
+
 	ew::Mesh* _quadMesh;
 
 	BlurEffect* _blurEffect;
 
 	ColorBuffer blurBuffer;
+	ColorBuffer blurBuffer2;
 	//ColorBuffer secondBuffer;	//We can use this to make several blur passes
 
 	//Must be a dynamic pointer object since undefined with foward declaration, otherwise we need to create a new one every frame
