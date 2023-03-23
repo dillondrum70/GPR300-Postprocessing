@@ -51,6 +51,36 @@ void BlurEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 	_shader->setFloat("_BlurStrength", _blurStrength);
 	_shader->setInt("horizontal", _horizontal);*/
 
+	unsigned int tex = Blur(colorBuffers);
+
+	//Blurred map
+	glActiveTexture(GL_TEXTURE0 + tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+
+	//Set sampler2Ds for bloom shader
+	_shader->use();
+	_shader->setInt("_ColorTex", tex);
+
+	//Bind default buffer so the next draw goes to the screen
+	_parent->Unbind(_parent->GetDimensions());
+}
+
+
+void BlurEffect::SetParent(FramebufferObject* parent)
+{
+	PostprocessEffect::SetParent(parent);
+
+	//Create buffers based on parent dimensions
+	for (int i = 0; i < 2; i++)
+	{
+		blurBuffers[i].Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
+	}
+}
+
+unsigned int BlurEffect::Blur(const std::vector<unsigned int>& colorBuffers)
+{
 	for (unsigned int i = 0; i < 2; i++)
 	{
 		blurFbos[i]->Bind();
@@ -82,28 +112,5 @@ void BlurEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 		tex = blurBuffers[!horizontal].GetTexture();
 	}
 
-	//Blurred map
-	glActiveTexture(GL_TEXTURE0 + tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-
-	//Set sampler2Ds for bloom shader
-	_shader->use();
-	_shader->setInt("_ColorTex", blurBuffers[horizontal].GetTexture());
-
-	//Bind default buffer so the next draw goes to the screen
-	_parent->Unbind(_parent->GetDimensions());
-}
-
-
-void BlurEffect::SetParent(FramebufferObject* parent)
-{
-	PostprocessEffect::SetParent(parent);
-
-	//Create buffers based on parent dimensions
-	for (int i = 0; i < 2; i++)
-	{
-		blurBuffers[i].Create(_parent->GetDimensions().x, _parent->GetDimensions().y);
-	}
+	return tex;
 }
