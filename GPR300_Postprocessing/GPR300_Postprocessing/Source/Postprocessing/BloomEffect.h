@@ -13,8 +13,7 @@ class BloomEffect : public PostprocessEffect
 {
 public:
 
-	BloomEffect(Shader* shader, std::string name, ew::Mesh* quadMesh, BlurEffect* blurEffect);
-	~BloomEffect();
+	BloomEffect(Shader* shader, std::string name, BlurEffect* blurEffect);
 
 	void ExposeImGui() override;
 
@@ -25,13 +24,13 @@ public:
 protected:
 
 	//Must be a dynamic pointer object since undefined with foward declaration, otherwise we need to create a new one every frame
-	std::vector<FramebufferObject*> blurFbos;
-	ColorBuffer blurBuffers[2];
+	//std::vector<FramebufferObject*> blurFbos;
+	//ColorBuffer blurBuffers[2];
 
-	int _samples = 5;
-	float _blurStrength = 1;
+	//int _samples = 5;
+	//float _blurStrength = 1;
 
-	ew::Mesh* _quadMesh;
+	//ew::Mesh* _quadMesh;
 
 	BlurEffect* _blurEffect;
 

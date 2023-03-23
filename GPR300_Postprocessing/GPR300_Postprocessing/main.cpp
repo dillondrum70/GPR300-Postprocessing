@@ -273,7 +273,7 @@ int main() {
 	BlurEffect blurBloomEffect = BlurEffect(blurBloomShader, "Gaussian Blur", &quadMesh);
 
 	Shader* bloomShader = new Shader("shaders/blit.vert", "shaders/bloom.frag");
-	BloomEffect bloomEffect = BloomEffect(bloomShader, "Bloom", &quadMesh, &blurBloomEffect);
+	BloomEffect bloomEffect = BloomEffect(bloomShader, "Bloom", &blurBloomEffect);
 	fbo.AddEffect(&bloomEffect);
 	
 	while (!glfwWindowShouldClose(window)) {
