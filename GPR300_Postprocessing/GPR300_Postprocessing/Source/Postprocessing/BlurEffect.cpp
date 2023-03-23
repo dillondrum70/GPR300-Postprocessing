@@ -51,7 +51,8 @@ void BlurEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 	_shader->setFloat("_BlurStrength", _blurStrength);
 	_shader->setInt("horizontal", _horizontal);*/
 
-	unsigned int tex = Blur(colorBuffers[0]);
+	bool horizontal;
+	unsigned int tex = Blur(colorBuffers[0], horizontal);
 
 	//Blurred map
 	glActiveTexture(GL_TEXTURE0 + tex);
@@ -62,7 +63,8 @@ void BlurEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 	//Set sampler2Ds for bloom shader
 	_shader->use();
 	_shader->setInt("_ColorTex", tex);
-
+	_shader->setFloat("_BlurStrength", _blurStrength);
+	_shader->setInt("horizontal", horizontal);
 	//Bind default buffer so the next draw goes to the screen
 	_parent->Unbind(_parent->GetDimensions());
 }
@@ -79,7 +81,7 @@ void BlurEffect::SetParent(FramebufferObject* parent)
 	}
 }
 
-unsigned int BlurEffect::Blur(unsigned int colorBuffer)
+unsigned int BlurEffect::Blur(unsigned int colorBuffer, bool& horizontal)
 {
 	for (unsigned int i = 0; i < 2; i++)
 	{
@@ -89,10 +91,10 @@ unsigned int BlurEffect::Blur(unsigned int colorBuffer)
 
 	//Use blur shader
 	unsigned int tex = colorBuffer;
-	bool horizontal = true;
+	horizontal = true;
 	_shader->use();
 	_shader->setFloat("_BlurStrength", _blurStrength);
-	for (unsigned int i = 0; i < _samples; i++)
+	for (unsigned int i = 0; i < _samples - (extraPass ? 1 : 0); i++)
 	{
 		//Bind current fbo
 		blurFbos[horizontal]->Bind();

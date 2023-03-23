@@ -7,6 +7,7 @@
 BloomEffect::BloomEffect(Shader* shader, std::string name, BlurEffect* blurEffect) : PostprocessEffect(shader, name)
 { 
 	_blurEffect = blurEffect; 
+	blurEffect->SetExtraPass(false);
 
 	//blurBuffer = ColorBuffer();
 	//secondBuffer = ColorBuffer();
@@ -26,7 +27,8 @@ void BloomEffect::ExposeImGui()
 
 void BloomEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 {
-	unsigned int tex = _blurEffect->Blur(colorBuffers[1]);
+	bool horizontal;
+	unsigned int tex = _blurEffect->Blur(colorBuffers[1], horizontal);
 
 	//Base color map
 	glActiveTexture(GL_TEXTURE0 + colorBuffers[0]);
