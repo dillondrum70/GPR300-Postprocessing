@@ -51,7 +51,7 @@ void BlurEffect::SetupShader(const std::vector<unsigned int>& colorBuffers)
 	_shader->setFloat("_BlurStrength", _blurStrength);
 	_shader->setInt("horizontal", _horizontal);*/
 
-	unsigned int tex = Blur(colorBuffers);
+	unsigned int tex = Blur(colorBuffers[0]);
 
 	//Blurred map
 	glActiveTexture(GL_TEXTURE0 + tex);
@@ -79,7 +79,7 @@ void BlurEffect::SetParent(FramebufferObject* parent)
 	}
 }
 
-unsigned int BlurEffect::Blur(const std::vector<unsigned int>& colorBuffers)
+unsigned int BlurEffect::Blur(unsigned int colorBuffer)
 {
 	for (unsigned int i = 0; i < 2; i++)
 	{
@@ -88,7 +88,7 @@ unsigned int BlurEffect::Blur(const std::vector<unsigned int>& colorBuffers)
 	}
 
 	//Use blur shader
-	unsigned int tex = colorBuffers[0];
+	unsigned int tex = colorBuffer;
 	bool horizontal = true;
 	_shader->use();
 	_shader->setFloat("_BlurStrength", _blurStrength);

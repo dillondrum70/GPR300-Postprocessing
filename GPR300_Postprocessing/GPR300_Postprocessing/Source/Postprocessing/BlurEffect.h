@@ -22,7 +22,7 @@ public:
 
 	void SetParent(FramebufferObject* parent) override;
 
-	unsigned int Blur(const std::vector<unsigned int>& colorBuffers);
+	unsigned int Blur(unsigned int colorBuffer);
 
 protected:
 
